@@ -3,9 +3,33 @@
         <a class="logo" target="_blank" href="/">
             <img src="../assets/images/ic_cloud_queue_white_36px.svg" alt="智和安捷">
         </a>
+        <ul>
+            <li tip="设备管理" class="sidebar-item loaded">
+                <router-link to="/thing/list">
+                    <i class="iconfont icon-bcc"></i>
+                    <span title="设备管理">物接入</span>
+                </router-link>
+            </li>
+            <li tip="平台管理" class="sidebar-item loaded">
+                <router-link to="/platform/list">
+                    <i class="iconfont icon-bcc"></i>
+                    <span title="平台管理">平台管理</span>
+                </router-link>
+            </li>
+            <li tip="用户管理" class="sidebar-item loaded">
+                <router-link to="/user/list">
+                    <i class="iconfont icon-bcc"></i>
+                    <span title="用户管理">用户管理</span>
+                </router-link>
+            </li>
+        </ul>
     </div>
 </template>
 <style>
+/****************
+  #main-sidebar
+******************/
+
 #main-sidebar {
     width: 180px;
     position: fixed;
@@ -43,5 +67,30 @@
 
 #main-sidebar .logo img {
     padding: 4px;
+}
+
+
+/******
+  menu
+********/
+
+#main-sidebar .sidebar-item {
+    position: relative;
+    display: block;
+    left: -200px;
+}
+
+#main-sidebar .sidebar-item.loaded {
+    left: 0;
+}
+
+#main-sidebar .sidebar-item>a {
+    display: block;
+    line-height: 40px;
+    height: 40px;
+    padding: 0 10px 0 18px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
 }
 </style>

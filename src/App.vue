@@ -4,9 +4,7 @@
         <div id="bce-content" class="sidebar-collapsed clearfix">
             <Topbar></Topbar>
             <div class="main-area">
-                <div id="main">
-                    <router-view></router-view>
-                </div>
+                <router-view></router-view>
             </div>
         </div>
     </div>

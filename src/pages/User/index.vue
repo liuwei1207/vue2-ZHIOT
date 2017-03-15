@@ -4,24 +4,24 @@
             <div class="sidebar-wrap sidebar-wrap-l3 submenu-open">
                 <ul class="sidebar submenu sidebar-current" sidetype="endpoint-list-1">
                     <li class="menu-header">
-                        <span class="normal-title">物接入</span>
+                        <span class="normal-title">用户管理</span>
                         <span class="short-title"></span>
                     </li>
-                    <li class="menu-item thing-list sidebar-current">
-                        <router-link to="/thing/list">
-                            <span class="normal-title">设备列表</span>
+                    <li class="menu-item user-list sidebar-current">
+                        <router-link to="/user/list">
+                            <span class="normal-title">用户列表</span>
                             <span class="short-title"></span>
                         </router-link>
                     </li>
-                    <li class="menu-item principal-list">
-                        <router-link to="/principal/list">
-                            <span class="normal-title">身份列表</span>
+                    <li class="menu-item user-list">
+                        <router-link to="/user/list">
+                            <span class="normal-title">角色列表</span>
                             <span class="short-title"></span>
                         </router-link>
                     </li>
-                    <li class="menu-item policy-list">
-                        <router-link to="/policy/list">
-                            <span class="normal-title">策略列表</span>
+                    <li class="menu-item user-list">
+                        <router-link to="/user/list">
+                            <span class="normal-title">权限列表</span>
                             <span class="short-title"></span>
                         </router-link>
                     </li>
