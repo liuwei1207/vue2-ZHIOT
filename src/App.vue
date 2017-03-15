@@ -1,7 +1,7 @@
 <template>
     <div>
         <Sidebar></Sidebar>
-        <div id="bce-content" class="sidebar-collapsed">
+        <div id="bce-content" class="sidebar-collapsed clearfix">
             <Topbar></Topbar>
             <div class="main-area">
                 <div id="main">
@@ -27,8 +27,25 @@ export default {
         }
 }
 </script>
-<style>
+<style lang="less">
 @import './assets/styles/reset.css';
+
+/*************
+  bce-content
+***************/
+
+#bce-content {
+    position: absolute;
+    top: 0;
+    left: 180px;
+    bottom: 0;
+    right: 0;
+}
+
+#bce-content.sidebar-collapsed {
+    left: 50px;
+}
+
 
 /********
   header
