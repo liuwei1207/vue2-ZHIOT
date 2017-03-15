@@ -10,7 +10,7 @@ module.exports = {
     },
     methods: {
         say() {
-            this.$store.commit('changeSidebarOpenStatus');
+            this.$store.commit('SIDEBAR_OPEN_CHANGE');
             console.log(this.$store.state.sidebarIsOpenFlag);
         }
     }

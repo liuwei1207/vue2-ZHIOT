@@ -8,8 +8,8 @@ const store = new Vuex.Store({
         sidebarIsOpenFlag: false
     },
     mutations: {
-        changeSidebarOpenStatus(state) {
-            state.sidebarIsOpenFlag = !state.sidebarIsOpenFlag;
+        [types.SIDEBAR_OPEN_CHANGE](state) {
+            state.sidebarIsOpenFlag = !state.sidebarIsOpenFlag
         }
     }
 })
