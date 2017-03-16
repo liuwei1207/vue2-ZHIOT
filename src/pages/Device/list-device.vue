@@ -1,7 +1,8 @@
 <template>
-    <div v-on:click="say()">list-device</div>
+    <div>list-device</div>
 </template>
 <script>
+
 module.exports = {
     data: function() {
         return {
@@ -9,10 +10,7 @@ module.exports = {
         }
     },
     methods: {
-        say() {
-            this.$store.commit('SIDEBAR_OPEN_CHANGE');
-            console.log(this.$store.state.sidebarIsOpenFlag);
-        }
+
     }
 }
 </script>

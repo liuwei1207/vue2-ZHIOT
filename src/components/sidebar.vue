@@ -1,5 +1,5 @@
 <template>
-    <div id="main-sidebar" class="sidebar-collapsed">
+    <div id="main-sidebar" v-bind:class="{ 'sidebar-collapsed': !isOpen }">
         <a class="logo" target="_blank" href="/">
             <img src="../assets/images/ic_cloud_queue_white_36px.svg" alt="智和安捷">
         </a>
@@ -25,6 +25,15 @@
         </ul>
     </div>
 </template>
+<script>
+module.exports = {
+    data: function() {
+        return {
+            isOpen: this.$store.state.sidebarIsOpenFlag
+        }
+    }
+}
+</script>
 <style>
 /****************
   #main-sidebar

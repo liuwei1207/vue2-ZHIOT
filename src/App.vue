@@ -1,7 +1,7 @@
 <template>
     <div>
         <Sidebar></Sidebar>
-        <div id="bce-content" class="sidebar-collapsed clearfix">
+        <div id="bce-content" v-bind:class="{ 'sidebar-collapsed': !isOpen }" class="clearfix">
             <Topbar></Topbar>
             <div class="main-area">
                 <router-view></router-view>
@@ -16,7 +16,7 @@ import Sidebar from './components/sidebar.vue';
 export default {
     data() {
             return {
-
+                isOpen: this.$store.state.sidebarIsOpenFlag
             }
         },
         components: {
