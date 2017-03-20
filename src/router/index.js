@@ -4,17 +4,26 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 import DevicePage from '../pages/Device/index.vue';
+import DeviceListPage from '../pages/Device/list-device.vue';
+
 import UserPage from '../pages/User/index.vue';
+import UserListPage from '../pages/User/list-user.vue';
+
 import PlatformPage from '../pages/Platform/index.vue';
-import ThingList from '../pages/Device/list-device.vue';
-import PolicyList from '../pages/Device/list-policy.vue';
-import PrincipalList from '../pages/Device/list-principal.vue';
-import UserList from '../pages/User/list.vue';
-import PlatformList from '../pages/Platform/list-platform.vue';
+import PlatformListPage from '../pages/Platform/list-platform.vue';
+
+import PolicyPage from '../pages/Policy/index.vue';
+import PolicyListPage from '../pages/Device/list-policy.vue';
+
+import PrincipalPage from '../pages/Policy/index.vue';
+import PrincipalListPage from '../pages/Device/list-principal.vue';
+
+import SettingPage from '../pages/Setting/index.vue';
+import SettingThemePage from '../pages/Setting/theme-setting.vue';
 
 import NotFoundPage from '../pages/NotFound/index.vue';
 
-export default new Router({
+const router = new Router({
     routes: [{
         path: '/',
         name: 'index',
@@ -26,25 +35,25 @@ export default new Router({
         children: [
             // 当 /thing/list 匹配成功，
             // UserHome 会被渲染在 DevicePage 的 <router-view> 中
-            { path: 'list', component: ThingList }
+            { path: 'list', component: DeviceListPage }
         ]
     }, {
         path: '/principal',
         name: 'principal',
-        component: DevicePage,
+        component: PrincipalPage,
         children: [
             // 当 /principal/list 匹配成功，
             // UserHome 会被渲染在 DevicePage 的 <router-view> 中
-            { path: 'list', component: PrincipalList }
+            { path: 'list', component: PrincipalListPage }
         ]
     }, {
         path: '/policy',
         name: 'policy',
-        component: DevicePage,
+        component: PolicyPage,
         children: [
             // 当 /thing/:idlist 匹配成功，
             // UserHome 会被渲染在 DevicePage 的 <router-view> 中
-            { path: 'list', component: PolicyList }
+            { path: 'list', component: PolicyListPage }
         ]
     }, {
         path: '/platform',
@@ -53,7 +62,7 @@ export default new Router({
         children: [
             // 当 /user/:id/list 匹配成功，
             // UserHome 会被渲染在 User 的 <router-view> 中
-            { path: 'list', component: PlatformList }
+            { path: 'list', component: PlatformListPage }
         ]
     }, {
         path: '/user',
@@ -62,7 +71,38 @@ export default new Router({
         children: [
             // 当 /user/:id/list 匹配成功，
             // UserHome 会被渲染在 User 的 <router-view> 中
-            { path: 'list', component: UserList }
+            { path: 'list', component: UserListPage }
         ]
+    }, {
+        path: '/setting',
+        name: 'setting',
+        component: SettingPage,
+        children: [
+            // 当 /user/:id/list 匹配成功，
+            // UserHome 会被渲染在 User 的 <router-view> 中
+            { path: 'theme', component: SettingThemePage }
+        ]
+    }, {
+        path: '/logout',
+        name: 'logout',
+        beforeEnter(to, from, next) {
+            next({
+                path: '/login', //  跳转到login页面
+            })
+        }
     }]
 })
+
+router.beforeEach((to, from, next) => {
+
+    if (!true) {
+        next({
+            path: '/login', //  跳转到login页面
+        })
+    } else {
+        next() // 进行下一个钩子函数
+    }
+
+})
+
+export default router

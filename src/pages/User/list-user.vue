@@ -2,10 +2,10 @@
     <div>
         <!-- list-content -->
         <div class="list-content">
-            <h2>平台列表</h2>
+            <h2>用户列表</h2>
             <div class="table-full-wrap">
                 <div class="operation-wrap">
-                    <i-button type="primary" @click="modalCreateDevice = true" icon="plus">添加平台</i-button>
+                    <i-button type="primary" @click="modalCreateDevice = true" icon="plus">添加用户</i-button>
                     <Poptip trigger="hover" title="提示标题" content="最多可创建10000个设备，可提交工单申请更多额度">
                         <i-button type="ghost" shape="circle" icon="help" size="small"></i-button>
                     </Poptip>
@@ -25,7 +25,7 @@
         <!-- modal-createDevice -->
         <Modal :value.sync="modalCreateDevice" width="640">
             <p slot="header">
-                <span>添加平台</span>
+                <span>添加用户</span>
             </p>
             <div style="text-align:center">
                 <Steps :current="modalStepCurrent" size="small">
