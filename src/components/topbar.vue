@@ -1,5 +1,5 @@
 <template>
-    <Menu mode="horizontal" :theme="theme" active-name="1">
+    <Menu mode="horizontal" :theme="theme" active-name="" @on-select="changeNav">
         <div class="top-bar--left">
             <a class="top-bar__logo" href="" title="">
                 <Icon type="ios-cloud-outline" size="36"></Icon>
@@ -48,14 +48,20 @@
 export default {
     data() {
             return {
-
+                currentRouter: ''
             }
         },
         computed: {
             theme() {
                 return this.$store.state.theme;
             }
+        },
+        methods: {
+            changeNav() {
+
+            }
         }
+
 }
 </script>
 <style>

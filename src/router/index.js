@@ -1,7 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import iView from 'iview';
+import Router from 'vue-router';
 
-Vue.use(Router)
+Vue.use(Router);
+Vue.use(iView);
+
+import LoginPage from '../pages/Login/index.vue';
 
 import DevicePage from '../pages/Device/index.vue';
 import DeviceListPage from '../pages/Device/list-device.vue';
@@ -27,7 +31,11 @@ const router = new Router({
     routes: [{
         path: '/',
         name: 'index',
-        component: DevicePage
+        component: LoginPage
+    }, {
+        path: '/login',
+        name: 'index',
+        component: LoginPage
     }, {
         path: '/thing',
         name: 'thing',
@@ -95,6 +103,9 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 
+    iView.LoadingBar.start();
+
+
     if (!true) {
         next({
             path: '/login', //  跳转到login页面
@@ -104,5 +115,9 @@ router.beforeEach((to, from, next) => {
     }
 
 })
+
+router.afterEach((to, from, next) => {
+    iView.LoadingBar.finish();
+});
 
 export default router

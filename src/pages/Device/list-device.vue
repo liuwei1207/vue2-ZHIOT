@@ -6,9 +6,9 @@
             <div class="table-full-wrap">
                 <div class="operation-wrap">
                     <i-button type="primary" @click="modalCreateDevice = true" icon="plus">添加平台</i-button>
-                    <Poptip trigger="hover" title="提示标题" content="最多可创建10000个设备，可提交工单申请更多额度">
+                    <Tooltip content="Right Center 文字提示" placement="right">
                         <i-button type="ghost" shape="circle" icon="help" size="small"></i-button>
-                    </Poptip>
+                    </Tooltip>
                     <i-input class="search-box" icon="search" @on-click="btnSearch" placeholder="请输入设备名称" style="width: 200px"></i-input>
                 </div>
             </div>
