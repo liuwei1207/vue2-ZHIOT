@@ -2,31 +2,18 @@
     <div class="layout" :class="{'layout-hide-text': spanLeft < 4}">
         <Row type="flex">
             <i-col :span="spanLeft" class="layout-menu-left">
-                <transition>
-                    <Menu active-name="1" theme="dark" width="auto">
-                        <div class="layout-logo-left"></div>
-                        <Menu-item name="1">
-                            <Icon type="ios-navigate" :size="iconSize"></Icon>
-                            <span class="layout-text">选项 1</span>
-                        </Menu-item>
-                        <Menu-item name="2">
-                            <Icon type="ios-keypad" :size="iconSize"></Icon>
-                            <span class="layout-text">选项 2</span>
-                        </Menu-item>
-                        <Menu-item name="3">
-                            <Icon type="ios-analytics" :size="iconSize"></Icon>
-                            <span class="layout-text">选项 3</span>
-                        </Menu-item>
-                    </Menu>
+                <transition name="router-transiton" enter-active-class="animated fadeIn" leave-active-class="animated fadeOutLeft" mode="out-in">
+                    <slot v-if="!loading" name="Menu"></slot>
                 </transition>
+                <i-button type="text" class="layout-toggleBtn" @click="toggleClick">
+                    <Icon type="chevron-left" size="32" :class="[spanLeft < 4 ? 'layout-fold-icon' : 'layout-open-icon']"></Icon>
+                </i-button>
             </i-col>
             <i-col :span="spanRight">
                 <div class="layout-breadcrumb">
-                    <Breadcrumb>
-                        <Breadcrumb-item href="#">首页</Breadcrumb-item>
-                        <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-                        <Breadcrumb-item>某应用</Breadcrumb-item>
-                    </Breadcrumb>
+                    <transition name="router-transiton" enter-active-class="animated fadeIn" leave-active-class="animated fadeOutLeft" mode="out-in">
+                        <slot name="Breadcrumb"></slot>
+                    </transition>
                 </div>
                 <div class="layout-content">
                     <div class="layout-content-main">
@@ -44,23 +31,31 @@
 export default {
     data() {
             return {
-                spanLeft: 4,
-                spanRight: 20
+                show: true
             }
         },
         computed: {
-            iconSize() {
-                return this.spanLeft === 4 ? 14 : 24;
+            // 全局加载状态
+            loading() {
+                return this.$store.state.loading;
+            },
+            // 返回左侧导航区宽度
+            spanLeft() {
+                return this.$store.state.pageOptions.spanLeft;
+            },
+            // 返回右侧内容区宽度
+            spanRight() {
+                return this.$store.state.pageOptions.spanRight;
             }
         },
         methods: {
             toggleClick() {
                 if (this.spanLeft === 4) {
-                    this.spanLeft = 2;
-                    this.spanRight = 22;
+                    this.$store.state.pageOptions.spanLeft = 2;
+                    this.$store.state.pageOptions.spanRight = 22;
                 } else {
-                    this.spanLeft = 4;
-                    this.spanRight = 20;
+                    this.$store.state.pageOptions.spanLeft = 4;
+                    this.$store.state.pageOptions.spanRight = 20;
                 }
             }
         }
@@ -76,6 +71,7 @@ export default {
 
 .layout>.ivu-row-flex {
     height: 100%;
+    min-height: 200px;
 }
 
 .layout-breadcrumb {
@@ -128,5 +124,38 @@ export default {
 
 .ivu-col {
     transition: width .2s ease-in-out;
+}
+
+
+/* toggle按钮 */
+
+.layout-toggleBtn {
+    position: absolute;
+    left: 50%;
+    bottom: 15px;
+    transform: translateX(-50%)!important;
+}
+
+.layout-open-icon {
+    transform: rotate(0deg);
+    transition: transform ease .36s;
+}
+
+.layout-fold-icon {
+    transform: rotate(180deg);
+    transition: transform ease .36s;
+}
+
+
+/* 切换页面时候， css过渡效果 */
+
+.router-transiton-enter-active,
+.router-transiton-leave-active {
+    transition: all 0.5s linear;
+}
+
+.router-transiton-enter,
+.router-transiton-leave-active {
+    opacity: 0
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <Menu mode="horizontal" :theme="theme" active-name="" @on-select="changeNav">
+    <Menu mode="horizontal" :theme="theme" active-name="groups" @on-select="handleRouterSwitch">
         <div class="top-bar--left">
             <a class="top-bar__logo" href="" title="">
                 <Icon type="ios-cloud-outline" size="36"></Icon>
@@ -7,36 +7,34 @@
             </a>
         </div>
         <div class="top-bar--right">
-            <Menu mode="horizontal" :theme="theme" active-name="1">
-                <Menu-item name="1">
-                    <Icon type="ios-paper"></Icon>
-                    群组管理
-                </Menu-item>
-                <Menu-item name="2">
-                    <Icon type="ios-people"></Icon>
-                    平台管理
-                </Menu-item>
-                <Menu-item name="3">
-                    <Icon type="ios-people"></Icon>
-                    设备管理
-                </Menu-item>
-                <Menu-item name="4">
-                    <Icon type="ios-people"></Icon>
-                    用户管理
-                </Menu-item>
-                <Submenu name="5">
-                    <template slot="title">
-                        <Icon type="settings"></Icon>
-                        116402157@163.com
-                    </template>
-                    <Menu-group title="个人设置">
-                        <Menu-item name="5-1">用户中心</Menu-item>
-                    </Menu-group>
-                    <Menu-group title="系统设置">
-                        <Menu-item name="5-4">退出系统</Menu-item>
-                    </Menu-group>
-                </Submenu>
-            </Menu>
+            <Menu-item name="groups">
+                <Icon type="ios-paper"></Icon>
+                群组管理
+            </Menu-item>
+            <Menu-item name="platforms">
+                <Icon type="ios-people"></Icon>
+                平台管理
+            </Menu-item>
+            <Menu-item name="devices">
+                <Icon type="ios-people"></Icon>
+                设备管理
+            </Menu-item>
+            <Menu-item name="users">
+                <Icon type="ios-people"></Icon>
+                用户管理
+            </Menu-item>
+            <Submenu name="5">
+                <template slot="title">
+                    <Icon type="settings"></Icon>
+                    116402157@163.com
+                </template>
+                <Menu-group title="个人设置">
+                    <Menu-item name="user/center">用户中心</Menu-item>
+                </Menu-group>
+                <Menu-group title="系统设置">
+                    <Menu-item name="logout">退出系统</Menu-item>
+                </Menu-group>
+            </Submenu>
         </div>
     </Menu>
 </template>
@@ -44,17 +42,29 @@
 export default {
     data() {
             return {
-                currentRouter: ''
+
             }
         },
         computed: {
+            // ---------------------
+            // 返回当前所选主题名称
+            // ---------------------
             theme() {
                 return this.$store.state.pageOptions.theme;
             }
         },
         methods: {
-            changeNav() {
-
+            // ---------------------
+            // 处理路由切换操作
+            // ---------------------
+            handleRouterSwitch(routerName) {
+                // console.log(routerName);
+                this.$router.push({
+                    path: "/" + routerName,
+                    // query: {
+                    //     plan: 'private'
+                    // }
+                });
             }
         }
 

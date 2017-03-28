@@ -5,15 +5,15 @@
             <div class="layout-logo-left"></div>
             <Menu-item name="1">
                 <Icon type="ios-navigate" :size="iconSize"></Icon>
-                <span class="layout-text">选项 1</span>
+                <span class="layout-text">选项 11</span>
             </Menu-item>
             <Menu-item name="2">
                 <Icon type="ios-keypad" :size="iconSize"></Icon>
-                <span class="layout-text">选项 2</span>
+                <span class="layout-text">选项 22</span>
             </Menu-item>
             <Menu-item name="3">
                 <Icon type="ios-analytics" :size="iconSize"></Icon>
-                <span class="layout-text">选项 3</span>
+                <span class="layout-text">选项 33</span>
             </Menu-item>
         </Menu>
         <!-- /slot-Menu -->
@@ -21,7 +21,7 @@
         <Breadcrumb slot="Breadcrumb">
             <Breadcrumb-item href="#">首页</Breadcrumb-item>
             <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-            <Breadcrumb-item>设备列表</Breadcrumb-item>
+            <Breadcrumb-item>平台列表</Breadcrumb-item>
         </Breadcrumb>
         <!-- /slot-Breadcrumb -->
     </MainContent>

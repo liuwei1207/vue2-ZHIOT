@@ -7,6 +7,7 @@ import store from './vuex/store'; // vue-store - for SPA Data manager
 import iView from 'iview'; // iView - vue2 ui
 import 'iview/dist/styles/iview.css'; // 使用 CSS 可以定制样式主题 ， 详情参考官网
 import './assets/styles/common.css'; // common.css
+import './assets/libs/animate/animate.min.css'; // animate
 import axios from 'axios'; // axios - for ajax connect
 import VueAxios from 'vue-axios'; // axios - for ajax connect
 // import VueWebsocket from "vue-websocket"; // vue-websocket - for websocket connect
