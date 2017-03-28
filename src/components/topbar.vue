@@ -7,40 +7,36 @@
             </a>
         </div>
         <div class="top-bar--right">
-            <Menu-item name="1">
-                <router-link :to="'/thing/list'">
+            <Menu mode="horizontal" :theme="theme" active-name="1">
+                <Menu-item name="1">
                     <Icon type="ios-paper"></Icon>
-                    设备管理
-                </router-link>
-            </Menu-item>
-            <Menu-item name="2">
-                <router-link :to="'/platform/list'">
-                    <Icon type="ios-albums"></Icon>
+                    群组管理
+                </Menu-item>
+                <Menu-item name="2">
+                    <Icon type="ios-people"></Icon>
                     平台管理
-                </router-link>
-            </Menu-item>
-            <Menu-item name="3">
-                <router-link :to="'/user/list'">
+                </Menu-item>
+                <Menu-item name="3">
+                    <Icon type="ios-people"></Icon>
+                    设备管理
+                </Menu-item>
+                <Menu-item name="4">
                     <Icon type="ios-people"></Icon>
                     用户管理
-                </router-link>
-            </Menu-item>
-            <Submenu name="4">
-                <template slot="title">
-                    <Icon type="gear-b"></Icon>
-                    综合设置
-                </template>
-                <Menu-group title="个性化">
-                    <router-link :to="'/setting/theme'">
-                        <Menu-item name="4-1">皮肤设置</Menu-item>
-                    </router-link>
-                </Menu-group>
-                <Menu-group title="系统设置">
-                    <router-link :to="'/logout'">
-                        <Menu-item name="4-2">退出系统</Menu-item>
-                    </router-link>
-                </Menu-group>
-            </Submenu>
+                </Menu-item>
+                <Submenu name="5">
+                    <template slot="title">
+                        <Icon type="settings"></Icon>
+                        116402157@163.com
+                    </template>
+                    <Menu-group title="个人设置">
+                        <Menu-item name="5-1">用户中心</Menu-item>
+                    </Menu-group>
+                    <Menu-group title="系统设置">
+                        <Menu-item name="5-4">退出系统</Menu-item>
+                    </Menu-group>
+                </Submenu>
+            </Menu>
         </div>
     </Menu>
 </template>
@@ -53,7 +49,7 @@ export default {
         },
         computed: {
             theme() {
-                return this.$store.state.theme;
+                return this.$store.state.pageOptions.theme;
             }
         },
         methods: {

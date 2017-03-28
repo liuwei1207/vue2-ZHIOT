@@ -6,23 +6,32 @@ Vue.use(Vuex);
 const strict = process.env.NODE_ENV !== 'production';
 
 const state = {
-    // 主题皮肤设置
-    theme: 'dark'
+    // 存放状态与数据
+
+    // 页面设置参数
+    pageOptions: {
+        theme: 'dark'
+    }
 };
 
 export const mutations = {
+    // mutations
     [types.THEME_CHANGE](state) {
-        if (state.theme === 'dark') {
-            state.theme = 'light';
-        } else {
-            state.theme = 'dark';
-        }
+
+    }
+};
+
+export const actions = {
+    // mutations
+    [types.TEST_ACTION](state) {
+
     }
 };
 
 const store = new Vuex.Store({
     state,
-    mutations
+    mutations,
+    actions
 })
 
 export default store
