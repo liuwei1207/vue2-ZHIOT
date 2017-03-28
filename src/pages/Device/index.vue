@@ -1,10 +1,10 @@
 <template>
-    <Content>
+    <MainContent>
         <!-- slot -->
-    </Content>
+    </MainContent>
 </template>
 <script>
-import Content from '../../components/Content.vue';
+import MainContent from '../../components/MainContent.vue';
 
 export default {
     data() {
@@ -19,7 +19,7 @@ export default {
 
         },
         components: {
-            Content
+            MainContent
         }
 }
 </script>
