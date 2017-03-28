@@ -1,7 +1,7 @@
 {
   "name": "vue2-ZHIOT",
-  "version": "1.0.0",
-  "description": "A vue2 init project",
+  "version": "0.0.1",
+  "description": "ZHIOT",
   "author": "Lewis <116402157@163.com>",
   "private": true,
   "scripts": {

@@ -1,6 +1,6 @@
 # vue2-init
 
-> A vue2 init project
+> ZHIOT
 
 ## Build Setup
 
