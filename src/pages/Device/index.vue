@@ -27,7 +27,7 @@
     </MainContent>
 </template>
 <script>
-import MainContent from '../../components/MainContent.vue';
+import MainContent from '../../components/layout-content.vue';
 
 export default {
     data() {
