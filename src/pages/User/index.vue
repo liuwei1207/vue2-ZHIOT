@@ -13,9 +13,8 @@
         <!-- /slot-Menu -->
         <!-- slot-Breadcrumb -->
         <Breadcrumb slot="Breadcrumb">
-            <Breadcrumb-item href="#">ZHIOT</Breadcrumb-item>
-            <Breadcrumb-item href="#">群组列表</Breadcrumb-item>
-            <Breadcrumb-item>平台列表</Breadcrumb-item>
+           <Breadcrumb-item href="#">ZHIOT</Breadcrumb-item>
+            <Breadcrumb-item>用户列表</Breadcrumb-item>
         </Breadcrumb>
         <!-- /slot-Breadcrumb -->
     </MainContent>

@@ -1,5 +1,5 @@
 <template>
-    <Menu mode="horizontal" :theme="theme" active-name="groups" @on-select="handleRouterSwitch">
+    <Menu mode="horizontal" :theme="theme" active-name="devices/groups-list" @on-select="handleRouterSwitch">
         <div class="top-bar--left">
             <a class="top-bar__logo" href="" title="">
                 <Icon type="ios-cloud-outline" size="36"></Icon>
@@ -7,17 +7,13 @@
             </a>
         </div>
         <div class="top-bar--right">
-            <Menu-item name="groups">
-                <Icon type="ios-paper"></Icon>
-                群组管理
+            <Menu-item name="devices/groups-list">
+                <Icon type="ios-people"></Icon>
+                设备管理
             </Menu-item>
             <Menu-item name="platforms">
                 <Icon type="ios-people"></Icon>
                 平台管理
-            </Menu-item>
-            <Menu-item name="devices">
-                <Icon type="ios-people"></Icon>
-                设备管理
             </Menu-item>
             <Menu-item name="users">
                 <Icon type="ios-people"></Icon>

@@ -3,7 +3,7 @@
         <Row type="flex">
             <i-col :span="spanLeft" class="layout-menu-left">
                 <transition name="router-transiton" enter-active-class="animated fadeIn" leave-active-class="animated fadeOutLeft" mode="out-in">
-                    <slot v-if="!loading" name="Menu"></slot>
+                    <slot name="Menu"></slot>
                 </transition>
                 <i-button type="text" class="layout-toggleBtn" @click="toggleClick">
                     <Icon type="chevron-left" size="32" :class="[spanLeft < 4 ? 'layout-fold-icon' : 'layout-open-icon']"></Icon>
@@ -35,10 +35,6 @@ export default {
             }
         },
         computed: {
-            // 全局加载状态
-            loading() {
-                return this.$store.state.loading;
-            },
             // 返回左侧导航区宽度
             spanLeft() {
                 return this.$store.state.pageOptions.spanLeft;
