@@ -18,7 +18,7 @@
         </div>
         <!-- /i-table -->
         <!-- modal-createDevice -->
-        <Modal :value.sync="createGroupsModalOptions.isopen" width="640">
+        <Modal :value.sync="createGroupsModalOptions.isopen" :mask-closable="false" :closable="false" width="640">
             <p slot="header">
                 <span>创建群组</span>
             </p>
@@ -111,8 +111,12 @@
                 </div>
                 <!-- /Step-item-3 -->
             </div>
-            <div slot="footer">
+            <div slot="footer" v-if="createGroupsModalOptions.currentStepIndex !== 3">
                 <i-button type="primary" @click="next">下一步</i-button>
+                <i-button type="ghost" @click="cancel">取消</i-button>
+            </div>
+            <div slot="footer" v-else>
+                <i-button type="primary" @click="submit">提交</i-button>
                 <i-button type="ghost" @click="cancel">取消</i-button>
             </div>
         </Modal>
@@ -145,12 +149,15 @@ export default {
                      * @type {Object}
                      */
                     formData: {
-                    	GroupName:'',
-                    	GroupDesc:'',
-                    	Enable:'',
-                    	Note:'',
-                    	CreatorUser:'',
-                    	CreateTime:''
+                        group: {
+                            GroupName: '',
+                            GroupDesc: '',
+                            Enable: '',
+                            Note: '',
+                            CreatorUser: '',
+                            CreateTime: ''
+                        },
+                        policy: []
                     }
                 },
                 /**
@@ -160,7 +167,10 @@ export default {
                 self: this,
 
 
-
+                /**
+                 * [groupsTableOptions 群组列表设置选项]
+                 * @type {Object}
+                 */
                 groupsTableOptions: {
                     /**
                      * [groupsTableData 群组列表数据]
@@ -245,7 +255,12 @@ export default {
              * @param  {[type]} routerName [路由参数]
              */
             jumpTo(routerName) {
-                this.$router.push({ path: '/devices/devices-list', query: { deviceId: 'id12345' }})
+                this.$router.push({
+                    path: '/devices/devices-list',
+                    query: {
+                        deviceId: 'id12345'
+                    }
+                })
             },
             show(index) {
                 this.$Modal.info({
@@ -279,7 +294,18 @@ export default {
              * [cancel 创建群组Steps步骤组件中的取消按钮]
              */
             cancel() {
+                // 点击取消按钮
                 this.createGroupsModalOptions.isopen = false;
+                // 在modal 淡出效果结束后， 返回初始界面同时重置数据
+                setTimeout(() => {
+                    // 返回初始界面
+                    this.createGroupsModalOptions.currentStepIndex = 0;
+                    // 重置数据
+                    // 等待开发
+                }, 200)
+            },
+            submit() {
+
             }
         }
 }

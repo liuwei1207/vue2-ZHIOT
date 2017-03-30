@@ -40,7 +40,7 @@ const router = new Router({
             // 这里的组件会被渲染在 DevicesPage 的 <router-view> 中
             { path: 'groups-list', name: '群组列表', component: GroupsListPage },
             { path: 'devices-list', name: '设备列表', component: DevicesListPage },
-            { path: 'policys-list', name: '设备列表', component: PolicysListPage }
+            { path: 'policys-list', name: '策略列表', component: PolicysListPage }
         ]
     }, {
         path: '/platforms',

@@ -111,8 +111,12 @@
                 </div>
                 <!-- /Step-item-3 -->
             </div>
-            <div slot="footer">
+            <div slot="footer" v-if="createGroupsModalOptions.currentStepIndex !== 3">
                 <i-button type="primary" @click="next">下一步</i-button>
+                <i-button type="ghost" @click="cancel">取消</i-button>
+            </div>
+            <div slot="footer" v-else>
+                <i-button type="primary" @click="submit">提交</i-button>
                 <i-button type="ghost" @click="cancel">取消</i-button>
             </div>
         </Modal>
