@@ -2,7 +2,7 @@
     <div class="inner-wrapper">
         <h2>策略列表</h2>
         <div class="operation-wrap">
-            <Button type="primary" icon="plus-round" @click="createGroupsModalOptions.isopen = true">创建群组</Button>
+            <Button type="primary" icon="plus-round" @click="createGroupsModalOptions.isopen = true">创建策略</Button>
             <Poptip trigger="hover" title="提示标题" content="提示内容" placement="right">
                 <Icon type="help-circled" size="20"></Icon>
             </Poptip>
@@ -18,9 +18,9 @@
         </div>
         <!-- /i-table -->
         <!-- modal-createDevice -->
-        <Modal :value.sync="createGroupsModalOptions.isopen" width="640">
+        <Modal :value.sync="createGroupsModalOptions.isopen" :mask-closable="false" :closable="false" width="640">
             <p slot="header">
-                <span>创建群组</span>
+                <span>创建策略</span>
             </p>
             <div>
                 <Steps :current="createGroupsModalOptions.currentStepIndex" size="small">

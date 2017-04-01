@@ -1,8 +1,8 @@
 <template>
     <div class="inner-wrapper">
-        <h2>群组列表</h2>
+        <h2>设备列表</h2>
         <div class="operation-wrap">
-            <Button type="primary" icon="plus-round" @click="createGroupsModalOptions.isopen = true">创建群组</Button>
+            <Button type="primary" icon="plus-round" @click="createGroupsModalOptions.isOpen = true">创建群组</Button>
             <Poptip trigger="hover" title="提示标题" content="提示内容" placement="right">
                 <Icon type="help-circled" size="20"></Icon>
             </Poptip>
@@ -18,112 +18,62 @@
         </div>
         <!-- /i-table -->
         <!-- modal-createDevice -->
-        <Modal :value.sync="createGroupsModalOptions.isopen" :mask-closable="false" :closable="false" width="640">
-            <p slot="header">
+        <Modal :value.sync="createGroupsModalOptions.isOpen" :mask-closable="false" :closable="false" width="640">
+            <p slot="header" v-show="createGroupsModalOptions.isEdit">
+                <span>编辑群组</span>
+            </p>
+            <p slot="header" v-show="!createGroupsModalOptions.isEdit">
                 <span>创建群组</span>
             </p>
             <div>
-                <Steps :current="createGroupsModalOptions.currentStepIndex" size="small">
-                    <Step title="创建群组"></Step>
-                    <Step title="设置策略"></Step>
-                    <Step title="配置确认"></Step>
-                </Steps>
                 <!-- Step-item-0 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 0" class="Step-item">
+                <div class="Step-item">
                     <Row>
-                        <Col span="12">
+                        <Col span="15">
                         <Form :label-width="100">
-                            <Form-item label="群组名称" prop="GroupName">
-                                <Input placeholder="请输入群组名称"></Input>
+                            <Form-item label="群组名称" prop="groupName">
+                                <Input placeholder="请输入群组名称" v-model="createGroupsModalOptions.formData.group.groupName" :disabled="createGroupsModalOptions.isEdit"></Input>
                             </Form-item>
-                            <Form-item label="全名" prop="GroupName">
+                            <Form-item label="地址" :label-width="160">
                                 <p>
-                                    parser_endpoint1489109617900/123123
+                                    tcp://{{ createGroupsModalOptions.formData.group.groupName }}.mqtt.iot.gz.baiduce.com:1883
                                 </p>
                             </Form-item>
-                            <Form-item label="群组名称" prop="GroupName">
-                                <Input placeholder="请输入群组名称"></Input>
+                            <Form-item label="是否启用" prop="groupEnable">
+                                <Radio-group v-model="createGroupsModalOptions.formData.group.groupEnable">
+                                    <Radio label="1">
+                                        <span>已启用</span>
+                                    </Radio>
+                                    <Radio label="0">
+                                        <span>未启用</span>
+                                    </Radio>
+                                </Radio-group>
+                            </Form-item>
+                            <Form-item label="描述" prop="groupDesc">
+                                <Input v-model="createGroupsModalOptions.formData.group.groupDesc" placeholder="描述..."></Input>
+                            </Form-item>
+                            <Form-item label="备注" prop="note">
+                                <Input v-model="createGroupsModalOptions.formData.group.note" type="textarea" placeholder="备注..."></Input>
                             </Form-item>
                         </Form>
                         </Col>
                     </Row>
                 </div>
                 <!-- /Step-item-0 -->
-                <!-- Step-item-1 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 1" class="Step-item">
-                    <Row>
-                        <Col span="15">
-                        <Form :label-width="100">
-                            <Form-item label="策略" prop="GroupName">
-                                <Input placeholder="请选择绑定策略"></Input>
-                            </Form-item>
-                            <Form-item>
-                                <p class="tipMsg">为设备选择策略（包括主题和权限），若没有须创建</p>
-                            </Form-item>
-                        </Form>
-                        </Col>
-                    </Row>
-                </div>
-                <!-- /Step-item-1 -->
-                <!-- Step-item-2 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 2" class="Step-item">
-                    <Row>
-                        <Col span="15">
-                        <Form :label-width="100">
-                            <Form-item label="群组">
-                                <p>群组名称1</p>
-                            </Form-item>
-                            <Form-item label="策略">
-                                <p>策略名称1</p>
-                            </Form-item>
-                        </Form>
-                        </Col>
-                    </Row>
-                </div>
-                <!-- /Step-item-2 -->
-                <!-- Step-item-3 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 3" class="Step-item">
-                    <Row>
-                        <Col span="24">
-                        <Form :label-width="100">
-                            <Form-item label="群组">
-                            </Form-item>
-                            <Form-item label="名称">
-                                <p>群组名称123</p>
-                            </Form-item>
-                            <Form-item label="策略">
-                            </Form-item>
-                            <Form-item label="名称">
-                                <p>策略名称123</p>
-                            </Form-item>
-                            <Form-item label="授权">
-                            </Form-item>
-                            <Form-item label="密钥">
-                                <p>
-                                    EzytDoFexVUA3h7luX40QvqcG+p3bpmJiNzJjY0i3Vg=
-                                    <i-button type="text" size="small">复制</i-button>
-                                    <i-button type="text" size="small">导出json</i-button>
-                                </p>
-                            </Form-item>
-                        </Form>
-                        </Col>
-                    </Row>
-                </div>
-                <!-- /Step-item-3 -->
             </div>
-            <div slot="footer" v-if="createGroupsModalOptions.currentStepIndex !== 3">
-                <i-button type="primary" @click="next">下一步</i-button>
-                <i-button type="ghost" @click="cancel">取消</i-button>
-            </div>
-            <div slot="footer" v-else>
-                <i-button type="primary" @click="submit">提交</i-button>
-                <i-button type="ghost" @click="cancel">取消</i-button>
+            <div slot="footer">
+                <i-button type="primary" @click="handleSubmit('add')" v-show="!createGroupsModalOptions.isEdit">新建</i-button>
+                <i-button type="primary" @click="handleSubmit('edit')" v-show="createGroupsModalOptions.isEdit">保存</i-button>
+                <i-button type="ghost" @click="handleCancel">取消</i-button>
             </div>
         </Modal>
         <!-- /modal-createDevice  -->
     </div>
 </template>
 <script>
+import config from '../../../config/index.js';
+let ajaxServer = 'http://' + config.ajax.host + ':' + config.ajax.port + '/cms_manage/api';
+
 export default {
     // ---------------------
     // data 管理本页数据和状态
@@ -136,28 +86,29 @@ export default {
                  */
                 createGroupsModalOptions: {
                     /**
-                     * [isopen modal插件配置参数 - 创建设备的对话框是否显示]
+                     * [isOpen modal插件配置参数 - 创建群组的对话框是否显示]
                      */
-                    isopen: false,
+                    isOpen: false,
+
                     /**
-                     * [currentStepIndex modal插件配置参数 - 当前Steps的下标]
-                     * @type {Number}
+                     * [isEdit 是否是编辑模式 - 在编辑模式下， 一些字段是不允许用户修改的]
+                     * @type {Boolean}
                      */
-                    currentStepIndex: 0,
+                    isEdit: false,
+
                     /**
                      * [formData 创建群组的表单， 用户输入的数据存放集合]
                      * @type {Object}
                      */
                     formData: {
                         group: {
-                            GroupName: '',
-                            GroupDesc: '',
-                            Enable: '',
-                            Note: '',
-                            CreatorUser: '',
-                            CreateTime: ''
-                        },
-                        policy: []
+                            groupId: '',
+                            groupName: '',
+                            groupDesc: '',
+                            groupEnable: '1',
+                            note: '',
+                            creator: '1',
+                        }
                     }
                 },
                 /**
@@ -176,52 +127,45 @@ export default {
                      * [groupsTableData 群组列表数据]
                      * @type {Array}
                      */
-                    groupsTableData: [{
-                        GroupName: '1231231',
-                        GroupDesc: 'test',
-                        Enable: 1,
-                        Note: '备注',
-                        CreatorUser: '116402157@163.com',
-                        CreateTime: '2017-03-15 09:14:04'
-                    }],
+                    groupsTableData: [],
                     /**
                      * [groupsTableColumns 群组列表表头]
                      * @type {Array}
                      */
                     groupsTableColumns: [{
                         title: '名称',
-                        key: 'GroupName',
+                        key: 'groupName',
                         render(row) {
-                            return `<i-button type="text" size="small" @click="jumpTo(${row.GroupName})">${row.GroupName}</i-button>`;
+                            return `<i-button type="text" size="small" @click="jumpTo('${row.groupName}')">${row.groupName}</i-button>`;
                         }
 
                     }, {
                         title: '描述',
-                        key: 'GroupDesc'
+                        key: 'groupDesc'
                     }, {
                         title: '是否启用',
-                        key: 'Enable',
+                        key: 'groupgroupEnable',
                         render(row) {
-                            const color = row.Enable == 1 ? 'green' : 'red';
-                            const text = row.Enable == 1 ? '启用' : '未启用';
+                            const color = row.groupEnable == 1 ? 'green' : 'red';
+                            const text = row.groupEnable == 1 ? '已启用' : '未启用';
                             return `<tag type="dot" color="${color}">${text}</tag>`;
                         }
                     }, {
                         title: '备注',
-                        key: 'Note'
+                        key: 'note'
                     }, {
                         title: '创建者',
-                        key: 'CreatorUser'
+                        key: 'creator'
                     }, {
                         title: '创建时间',
-                        key: 'CreateTime'
+                        key: 'createTime'
                     }, {
                         title: '操作',
                         key: 'action',
                         width: 150,
                         align: 'center',
                         render(row, column, index) {
-                            return `<i-button type="text" size="small" @click="show(${index})">查看</i-button> <i-button type="text" size="small" @click="remove(${index})">删除</i-button>`;
+                            return `<i-button type="text" size="small" @click="handleEdit(${index})">编辑</i-button> <i-button type="text" size="small" @click="remove('${row.groupId}','${row.groupName}')">删除</i-button>`;
                         }
                     }]
                 }
@@ -235,49 +179,59 @@ export default {
              * [changePage 群组列表的分页切换]
              */
             changePage() {
-                // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-                let mockTableData = [];
-                for (let i = 0; i < 10; i++) {
-                    mockTableData.push({
-                        GroupName: '群组',
-                        GroupDesc: '描述',
-                        Enable: '1',
-                        Note: '备注',
-                        CreatorUser: '创建者',
-                        CreateTime: 1
-                    })
-                }
+                // // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
+                // let mockTableData = [];
+                // for (let i = 0; i < 10; i++) {
+                //     mockTableData.push({
+                //         groupName: '群组',
+                //         groupDesc: '描述',
+                //         groupEnable: '1',
+                //         note: '备注',
+                //         creator: '创建者',
+                //         createTime: 1
+                //     })
+                // }
 
-                this.groupsTableOptions.groupsTableData = mockTableData;
+                // this.groupsTableOptions.groupsTableData = mockTableData;
             },
             /**
              * [jumpTo 控制页面切换]
-             * @param  {[type]} routerName [路由参数]
+             * @param  {[type]} groupName [群组名称]
+             * @return {[type]}           [description]
              */
-            jumpTo(routerName) {
+            jumpTo(groupName) {
                 this.$router.push({
                     path: '/devices/devices-list',
                     query: {
-                        deviceId: 'id12345'
+                        deviceId: groupName
                     }
                 })
             },
-            show(index) {
-                this.$Modal.info({
-                    title: '查看',
-                    content: '<p>一些对话框内容</p><p>一些对话框内容</p>'
-                });
+            /**
+             * [handleEdit 编辑群组数据]
+             * @param  {[type]} index [所选数据索引]
+             * @return {[type]}       [description]
+             */
+            handleEdit(index) {
+                // 更新表单数据
+                this.createGroupsModalOptions.formData.group = this.groupsTableOptions.groupsTableData[index];
+                // 打开编辑模式
+                this.createGroupsModalOptions.isEdit = true;
+                // 打开表单
+                this.createGroupsModalOptions.isOpen = true;
+
             },
-            remove(index) {
+            remove(groupId, groupName) {
                 this.$Modal.confirm({
                     title: '删除',
-                    content: '<p>一些对话框内容</p><p>一些对话框内容</p>',
+                    content: `该操作会删除群组： ${groupName}`,
                     onOk: () => {
-                        this.$Message.success('点击了确定');
+                        // 请求服务器， 删除一条群组
+                        this.delGroupsList(groupId);
                     },
-                    onCancel: () => {
-                        this.$Message.info('点击了取消');
-                    }
+                    // onCancel: () => {
+                    //     this.$Message.info('点击了取消');
+                    // }
                 });
             },
             /**
@@ -291,11 +245,14 @@ export default {
                 }
             },
             /**
-             * [cancel 创建群组Steps步骤组件中的取消按钮]
+             * [handleCancel 创建群组组件中的取消按钮]
              */
-            cancel() {
+            handleCancel() {
                 // 点击取消按钮
-                this.createGroupsModalOptions.isopen = false;
+                // 关闭modal
+                this.createGroupsModalOptions.isOpen = false;
+                // 退出编辑模式
+                this.createGroupsModalOptions.isEdit = false;
                 // 在modal 淡出效果结束后， 返回初始界面同时重置数据
                 setTimeout(() => {
                     // 返回初始界面
@@ -304,9 +261,160 @@ export default {
                     // 等待开发
                 }, 200)
             },
-            submit() {
+            /**
+             * [handleSubmit 创建群组组件中的提交按钮]
+             */
+            handleSubmit(action) {
 
+                if (action === 'add') {
+
+                    // 获取表单新建数据
+                    let listData = {
+                        groupName: this.createGroupsModalOptions.formData.group.groupName,
+                        groupDesc: this.createGroupsModalOptions.formData.group.groupDesc,
+                        groupEnable: this.createGroupsModalOptions.formData.group.groupEnable,
+                        note: this.createGroupsModalOptions.formData.group.note,
+                        creator: this.createGroupsModalOptions.formData.group.creator
+                    }
+
+                    this.addGroupsList(listData);
+
+                } else if (action === 'edit') {
+
+                    // 获取表单编辑数据
+                    let newListData = {
+                        groupId: this.createGroupsModalOptions.formData.group.groupId,
+                        groupName: this.createGroupsModalOptions.formData.group.groupName,
+                        groupDesc: this.createGroupsModalOptions.formData.group.groupDesc,
+                        groupEnable: this.createGroupsModalOptions.formData.group.groupEnable,
+                        note: this.createGroupsModalOptions.formData.group.note,
+                        creator: this.createGroupsModalOptions.formData.group.creator
+                    }
+
+                    this.editGroupsList(newListData);
+                }
+            },
+
+            /**
+             * [getGroupsLists 从服务器获取群组列表数据]
+             * @return {[type]} [description]
+             */
+            getGroupsLists() {
+                //发送get请求， 获取去组列表数据
+                // method: GET
+                this.$http.get(ajaxServer + '/groups?groupType=0').then((res) => {
+                    if (res.status === 200) {
+                        // console.log(res.data.data.list)
+                        this.groupsTableOptions.groupsTableData = res.data.data.list;
+                    } else {
+                        console.log('请求资源错误');
+                    }
+                })
+            },
+            /**
+             * [addGroupsList 创建一条群组数据]
+             * @param {[type]} listData [新数据json集合]
+             */
+            addGroupsList(listData) {
+                //发送post请求， 添加一条群组数据
+                // method: POST
+                this.$http.post(ajaxServer + '/groups', listData).then((res) => {
+                    if (res.status === 200) {
+                        // ajax连接正常
+                        if (res.data.success == 'true') {
+                            // 操作成功调用通知提醒
+                            this.$Message.success('创建群组成功!');
+                            // 重新加载列表数据
+                            this.getGroupsLists();
+
+                            // 创建群组成功，取消关闭modal
+                            this.createGroupsModalOptions.isOpen = false;
+                            this.resetGroupsData();
+                        } else {
+                            // 操作失败调用通知提醒
+                            this.$Message.error(res.data.data.msg);
+                        }
+
+                    } else {
+                        // ajax连接异常
+                        this.$Message.error('网络异常!');
+                    }
+                });
+            },
+            editGroupsList(newListData) {
+                this.$http.put(ajaxServer + '/groups', newListData).then((res) => {
+                    if (res.status === 200) {
+                        // ajax连接正常
+                        if (res.data.success == 'true') {
+                            // 操作成功调用通知提醒
+                            this.$Message.success('编辑群组成功!');
+                            // 重新加载列表数据
+                            this.getGroupsLists();
+
+                            // 创建群组成功，取消关闭modal
+                            this.createGroupsModalOptions.isOpen = false;
+
+                            this.resetGroupsData();
+                        } else {
+                            // 操作失败调用通知提醒
+                            this.$Message.error(res.data.data.msg);
+                        }
+
+                    } else {
+                        // ajax连接异常
+                        this.$Message.error('网络异常!');
+                    }
+                });
+            },
+            /**
+             * [delGroupsList 删除群组纪录]
+             * @param  {[type]} groupId   [群组id]
+             * @param  {[type]} groupName [群组名称]
+             * @return {[type]}           [description]
+             */
+            delGroupsList(groupId) {
+                //发送delete请求， 添加一条群组数据
+                // method: DELETE
+                this.$http.delete(ajaxServer + '/groups?groupId=' + groupId).then((res) => {
+                    if (res.status === 200) {
+                        // ajax连接正常
+                        if (res.data.success == 'true') {
+                            // 操作成功调用通知提醒
+                            this.$Message.success('删除群组成功!');
+                            // 重新加载列表数据
+                            this.getGroupsLists();
+
+                        } else {
+                            // 操作失败调用通知提醒
+                            this.$Message.error(res.data.data.msg);
+                        }
+
+                    } else {
+                        // ajax连接异常
+                        this.$Message.error('网络异常!');
+                    }
+                })
+            },
+            resetGroupsData() {
+                setTimeout(() => {
+                    // 返回初始界面
+                    // 重置表单数据
+                    this.createGroupsModalOptions.formData.group = {
+                        groupName: '',
+                        groupDesc: '',
+                        groupEnable: '1',
+                        note: '',
+                        creator: '1',
+                    }
+                }, 200)
             }
+        },
+        // ---------------------
+        // created 页面生命周期
+        // ---------------------
+        created() {
+            // 加载群组列表
+            this.getGroupsLists();
         }
 }
 </script>
@@ -350,5 +458,16 @@ export default {
 
 .ivu-modal .ivu-steps-item:last-child {
     width: 100px!important;
+}
+
+.ivu-modal .Step-item:last-child .ivu-form-item--title {
+    background-color: #F5F5F5;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.topics-wrap {
+    max-height: 300px;
+    overflow: auto;
 }
 </style>
