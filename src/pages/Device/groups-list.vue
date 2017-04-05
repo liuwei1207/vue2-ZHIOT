@@ -30,8 +30,8 @@
                 <div class="Step-item">
                     <Row>
                         <Col span="15">
-                        <Form :label-width="100">
-                            <Form-item label="群组名称" prop="groupName">
+                        <Form :label-width="100" ref="createGroupsModalOptions.formData.group" :model="createGroupsModalOptions.formData.group" :rules="createGroupsModalOptions.formData.groupRules">
+                            <Form-item label="群组名称" prop="groupName" v-model="createGroupsModalOptions.formData.group.groupName">
                                 <Input placeholder="请输入群组名称" v-model="createGroupsModalOptions.formData.group.groupName" :disabled="createGroupsModalOptions.isEdit"></Input>
                             </Form-item>
                             <Form-item label="地址" :label-width="160">
@@ -79,11 +79,31 @@ export default {
     // data 管理本页数据和状态
     // ---------------------
     data() {
+            //群组名称的rules验证函数
+            const validateName = (rule, value, callback) => {
+                let regex = new RegExp("^[A-Za-z]+$");
+
+                if (!value) {
+                    return callback(new Error('群组名称不能为空'));
+                }
+                // 模拟异步验证效果
+                setTimeout(() => {
+                    if (regex.test(value)) {
+                        callback();
+                    } else {
+                        // console.log(regex.test(value));
+                        callback(new Error('只允许字母定义'));
+                    }
+                }, 200);
+            };
+
+
             return {
                 /**
                  * [createGroupsModalOptions 创建群组对话框设置选项]
                  * @type {Object}
                  */
+
                 createGroupsModalOptions: {
                     /**
                      * [isOpen modal插件配置参数 - 创建群组的对话框是否显示]
@@ -108,6 +128,17 @@ export default {
                             groupEnable: '1',
                             note: '',
                             creator: '1',
+                        },
+                        /**
+                         * [g设置表单的相应rules]
+                         * @type {Object}
+                         */
+                        groupRules: {
+                            //群组名称rules
+                            groupName: [{
+                                validator: validateName,
+                                trigger: 'blur'
+                            }]
                         }
                     }
                 },
@@ -261,10 +292,13 @@ export default {
                     // 等待开发
                 }, 200)
             },
+
             /**
              * [handleSubmit 创建群组组件中的提交按钮]
              */
             handleSubmit(action) {
+
+
 
                 if (action === 'add') {
 
@@ -316,55 +350,69 @@ export default {
              * @param {[type]} listData [新数据json集合]
              */
             addGroupsList(listData) {
-                //发送post请求， 添加一条群组数据
-                // method: POST
-                this.$http.post(ajaxServer + '/groups', listData).then((res) => {
-                    if (res.status === 200) {
-                        // ajax连接正常
-                        if (res.data.success == 'true') {
-                            // 操作成功调用通知提醒
-                            this.$Message.success('创建群组成功!');
-                            // 重新加载列表数据
-                            this.getGroupsLists();
+                this.$refs["createGroupsModalOptions.formData.group"].validate((valid) => {
 
-                            // 创建群组成功，取消关闭modal
-                            this.createGroupsModalOptions.isOpen = false;
-                            this.resetGroupsData();
-                        } else {
-                            // 操作失败调用通知提醒
-                            this.$Message.error(res.data.data.msg);
-                        }
+                    if (valid) {
+                        //发送post请求， 添加一条群组数据
+                        // method: POST
+                        this.$http.post(ajaxServer + '/groups', listData).then((res) => {
+                            if (res.status === 200) {
+                                // ajax连接正常
+                                if (res.data.success == 'true') {
+                                    // 操作成功调用通知提醒
+                                    this.$Message.success('创建群组成功!');
+                                    // 重新加载列表数据
+                                    this.getGroupsLists();
+
+                                    // 创建群组成功，取消关闭modal
+                                    this.createGroupsModalOptions.isOpen = false;
+                                    this.resetGroupsData();
+                                } else {
+                                    // 操作失败调用通知提醒
+                                    this.$Message.error(res.data.data.msg);
+                                }
+
+                            } else {
+                                // ajax连接异常
+                                this.$Message.error('网络异常!');
+                            }
+                        });
 
                     } else {
-                        // ajax连接异常
-                        this.$Message.error('网络异常!');
+                        this.$Message.error("表单校验失败");
                     }
-                });
+                })
             },
             editGroupsList(newListData) {
-                this.$http.put(ajaxServer + '/groups', newListData).then((res) => {
-                    if (res.status === 200) {
-                        // ajax连接正常
-                        if (res.data.success == 'true') {
-                            // 操作成功调用通知提醒
-                            this.$Message.success('编辑群组成功!');
-                            // 重新加载列表数据
-                            this.getGroupsLists();
+                this.$refs["createGroupsModalOptions.formData.group"].validate((valid) => {
+                    if (valid) {
+                        this.$http.put(ajaxServer + '/groups', newListData).then((res) => {
+                            if (res.status === 200) {
+                                // ajax连接正常
+                                if (res.data.success == 'true') {
+                                    // 操作成功调用通知提醒
+                                    this.$Message.success('编辑群组成功!');
+                                    // 重新加载列表数据
+                                    this.getGroupsLists();
 
-                            // 创建群组成功，取消关闭modal
-                            this.createGroupsModalOptions.isOpen = false;
+                                    // 创建群组成功，取消关闭modal
+                                    this.createGroupsModalOptions.isOpen = false;
 
-                            this.resetGroupsData();
-                        } else {
-                            // 操作失败调用通知提醒
-                            this.$Message.error(res.data.data.msg);
-                        }
+                                    this.resetGroupsData();
+                                } else {
+                                    // 操作失败调用通知提醒
+                                    this.$Message.error(res.data.data.msg);
+                                }
 
+                            } else {
+                                // ajax连接异常
+                                this.$Message.error('网络异常!');
+                            }
+                        });
                     } else {
-                        // ajax连接异常
-                        this.$Message.error('网络异常!');
+                        this.$Message.error("表单校验失败");
                     }
-                });
+                })
             },
             /**
              * [delGroupsList 删除群组纪录]
