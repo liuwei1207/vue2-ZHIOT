@@ -176,7 +176,7 @@ export default {
                         title: '名称',
                         key: 'groupName',
                         render(row) {
-                            return `<i-button type="text" size="small" @click="jumpTo('${row.groupName}')">${row.groupName}</i-button>`;
+                            return `<i-button type="text" size="small" @click="jumpTo('${row.groupId}')">${row.groupName}</i-button>`;
                         }
 
                     }, {
@@ -239,11 +239,11 @@ export default {
              * @param  {[type]} groupName [群组名称]
              * @return {[type]}           [description]
              */
-            jumpTo(groupName) {
+            jumpTo(groupId) {
                 this.$router.push({
                     path: '/devices/devices-list',
                     query: {
-                        deviceId: groupName
+                        groupId: groupId
                     }
                 })
             },
@@ -359,6 +359,7 @@ export default {
                     if (res.status === 200) {
                         // console.log(res.data.data.list)
                         this.groupsTableOptions.groupsTableData = res.data.data.list;
+                        console.log(res.data.data.list);
                     } else {
                         console.log('请求资源错误');
                     }
