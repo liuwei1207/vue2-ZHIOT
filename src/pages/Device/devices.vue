@@ -10,7 +10,7 @@
                     <span class="layout-text">群组列表</span>
                 </Menu-item>
             </Menu-group>
-            <Menu-group title="设备管理" v-else>
+            <Menu-group v-else>
                 <!-- else -->
                 <Menu-item name="devices/devices-list">
                     <Icon type="document-text" :size="iconSize"></Icon>

@@ -12,7 +12,7 @@
             <Table :context="self" :data="groupsTableOptions.groupsTableData" :columns="groupsTableOptions.groupsTableColumns" stripe></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
-                    <Page :total="100" :current="1" @on-change="changePage"></Page>
+                    <Page ref="pa" :total="100" @on-change="changePage" :page-size="1" ></Page>
                 </div>
             </div>
         </div>
@@ -23,39 +23,20 @@
                 <span>创建设备</span>
             </p>
             <div>
+                <!-- 进度条 -->
                 <Steps :current="createGroupsModalOptions.currentStepIndex" size="small">
-                    <Step title="创建群组"></Step>
                     <Step title="设置策略"></Step>
                     <Step title="配置确认"></Step>
+                    <Step title="表单确认"></Step>
                 </Steps>
+                <!-- 设置策略 -->
                 <!-- Step-item-0 -->
                 <div v-show="createGroupsModalOptions.currentStepIndex == 0" class="Step-item">
-                    <Row>
-                        <Col span="12">
-                        <Form :label-width="100">
-                            <Form-item label="群组名称" prop="groupName">
-                                <Input placeholder="请输入群组名称" v-model="createGroupsModalOptions.formData.group.groupName"></Input>
-                            </Form-item>
-                            <Form-item label="全名" :label-width="160">
-                                <p>
-                                    parser_endpoint1489109617900/{{ createGroupsModalOptions.formData.group.groupName }}
-                                </p>
-                            </Form-item>
-                            <Form-item label="群组名称" prop="groupName">
-                                <Input placeholder="请输入群组名称"></Input>
-                            </Form-item>
-                        </Form>
-                        </Col>
-                    </Row>
-                </div>
-                <!-- /Step-item-0 -->
-                <!-- Step-item-1 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 1" class="Step-item">
-                    <Row v-if="createGroupsModalOptions.isAddingPolicy && (createGroupsModalOptions.currentStepIndex == 1)">
+                    <Row v-if="createGroupsModalOptions.policyAdding && (createGroupsModalOptions.currentStepIndex == 0)">
                         <Col span="15">
                         <Form :label-width="100">
                             <Form-item label="策略" prop="groupName">
-                                <Select placeholder="请选择" @on-change="handleSelectPolicy">
+                                <Select placeholder="请选择" @on-change="">
                                     <Option value="beijing">策略1</Option>
                                     <Option value="shanghai">策略2</Option>
                                     <Option value="">
@@ -69,8 +50,7 @@
                         </Form>
                         </Col>
                     </Row>
-                    <!-- 新建设备 -->
-                    <Row v-if="!createGroupsModalOptions.isAddingPolicy && (createGroupsModalOptions.currentStepIndex == 1)">
+                    <Row v-if="!createGroupsModalOptions.policyAdding && (createGroupsModalOptions.currentStepIndex == 0)">
                         <Col span="15">
                         <Form ref="createGroupsModalOptions.formData.policy" :model="createGroupsModalOptions.formData.policy" :label-width="80">
                             <Form-item label="策略名称">
@@ -100,15 +80,16 @@
                                 </Row>
                             </Form-item>
                             <Form-item>
-                                <Button type="ghost" @click="handleResetAddingPolicy" style="margin-left: 8px">重置</Button>
+                                <Button type="ghost" @click="handleResetAddingPolicy" style="margin-left: 8px">返回</Button>
                             </Form-item>
                         </Form>
                         </Col>
                     </Row>
                 </div>
                 <!-- /Step-item-1 -->
+                <!-- 配置确认 -->
                 <!-- Step-item-2 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 2" class="Step-item">
+                <div v-show="createGroupsModalOptions.currentStepIndex == 1" class="Step-item">
                     <Row>
                         <Col span="15">
                         <Form :label-width="100">
@@ -127,8 +108,9 @@
                     </Row>
                 </div>
                 <!-- /Step-item-2 -->
+                <!-- 表单确认 -->
                 <!-- Step-item-3 -->
-                <div v-show="createGroupsModalOptions.currentStepIndex == 3" class="Step-item">
+                <div v-show="createGroupsModalOptions.currentStepIndex == 2" class="Step-item">
                     <Row>
                         <Col span="24">
                         <Form :label-width="100">
@@ -169,7 +151,7 @@
             </div>
             <div slot="footer" v-else>
                 <i-button type="primary" @click="next" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button>
-                <i-button type="primary" @click="submit" v-if="createGroupsModalOptions.currentStepIndex == 3">确定</i-button>
+                <i-button type="primary" @click="submit" v-if="createGroupsModalOptions.currentStepIndex == 2">确定</i-button>
                 <i-button type="ghost" @click="cancel" v-if="createGroupsModalOptions.currentStepIndex !== 3">取消</i-button>
             </div>
         </Modal>
@@ -186,6 +168,9 @@ export default {
     // ---------------------
     data() {
             return {
+                page: {
+                    pageX: 1
+                },
                 /**
                  * [createGroupsModalOptions 创建群组对话框设置选项]
                  * @type {Object}
@@ -201,10 +186,10 @@ export default {
                      */
                     currentStepIndex: 0,
                     /**
-                     * [isAddingPolicy 是否正在新建策略]
+                     * [policyAdding 是否正在新建策略]
                      * @type {Boolean}
                      */
-                    isAddingPolicy: true,
+                    policyAdding: true,
                     /**
                      * [formData 创建群组的表单， 用户输入的数据存放集合]
                      * @type {Object}
@@ -295,21 +280,18 @@ export default {
             /**
              * [changePage 群组列表的分页切换]
              */
-            changePage() {
-                // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-                let mockTableData = [];
-                for (let i = 0; i < 10; i++) {
-                    mockTableData.push({
-                        groupName: '群组',
-                        groupDesc: '描述',
-                        groupgroupEnable: '1',
-                        note: '备注',
-                        creator: '创建者',
-                        createTime: 1
-                    })
-                }
-
-                this.groupsTableOptions.groupsTableData = mockTableData;
+            changePage(num) {
+                console.log(num);
+                //发送get请求， 获取去组列表数据
+                // method: GET
+                this.$http.get(ajaxServer + '/devices?page='+num+'&groupId=83&sortby=create_time').then((res) => {
+                    if (res.status === 200) {
+                        // console.log(res.data.data.list)
+                        this.groupsTableOptions.groupsTableData = res.data.data.list;
+                    } else {
+                        console.log('请求资源错误');
+                    }
+                })
             },
             /**
              * [jumpTo 控制页面切换]
@@ -386,7 +368,7 @@ export default {
              * @return {[type]} [description]
              */
             handleResetAddingPolicy() {
-                this.createGroupsModalOptions.isAddingPolicy = !this.createGroupsModalOptions.isAddingPolicy;
+                this.createGroupsModalOptions.policyAdding = !this.createGroupsModalOptions.policyAdding;
             },
             /**
              * [handleAddTopic 新增主题功能]
@@ -408,18 +390,18 @@ export default {
             },
 
             /**
-             * [getGroupsList description]
+             * [getGroupsList 获取设备列表]
              * @return {[type]} [description]
              */
             getGroupsList() {
                 //发送get请求， 获取去组列表数据
                 // method: GET
-                this.$http.get(ajaxServer + '/groups?groupType=0').then((res) => {
+                this.$http.get(ajaxServer + '/devices?page=1&groupId=83&sortby=create_time').then((res) => {
                     if (res.status === 200) {
                         // console.log(res.data.data.list)
                         this.groupsTableOptions.groupsTableData = res.data.data.list;
                     } else {
-                        console.log('请求资源错误')
+                        console.log('请求资源错误');
                     }
                 })
             }
