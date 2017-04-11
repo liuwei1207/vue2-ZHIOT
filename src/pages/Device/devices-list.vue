@@ -114,11 +114,6 @@
                     <Row>
                         <Col span="24">
                         <Form :label-width="100">
-                            <Form-item label="群组" class="ivu-form-item--title">
-                            </Form-item>
-                            <Form-item label="名称">
-                                <p>{{createGroupsModalOptions.formData.policy.policyName}}</p>
-                            </Form-item>
                             <Form-item label="策略" class="ivu-form-item--title">
                             </Form-item>
                             <Form-item label="名称">
@@ -150,8 +145,8 @@
                 <i-button type="ghost" @click="cancel">取消</i-button>
             </div>
             <div slot="footer" v-else>
-                <i-button type="primary" @click="next" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button>
-                <i-button type="primary" @click="submit" v-if="createGroupsModalOptions.currentStepIndex == 2">确定</i-button>
+                <!-- <i-button type="primary" @click="next" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button> -->
+                <i-button type="primary" @click="submit" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button>
                 <i-button type="ghost" @click="cancel" v-if="createGroupsModalOptions.currentStepIndex !== 3">取消</i-button>
             </div>
         </Modal>

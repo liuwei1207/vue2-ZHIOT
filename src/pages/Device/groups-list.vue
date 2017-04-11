@@ -12,7 +12,7 @@
             <Table :context="self" :data="groupsTableOptions.groupsTableData" :columns="groupsTableOptions.groupsTableColumns" stripe></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
-                    <Page :total="100" @on-change="changePage" :page-size="1"></Page>
+                    <Page ref="pa" :total="page.count" :current="page.pageX" :page-size="page.pagesize" @on-change="changePage" @on-page-size-change="pageSizeChange" size="small"  :page-size-opts="[1,2,3,4]" show-total show-elevator show-sizer></Page>
                 </div>
             </div>
         </div>
@@ -110,6 +110,12 @@ export default {
                 }
             };
             return {
+                //分页器
+                page: {
+                    pageX: 1,
+                    count: 1,
+                    pagesize: 2
+                },
                 /**
                  * [createGroupsModalOptions 创建群组对话框设置选项]
                  * @type {Object}
@@ -218,21 +224,32 @@ export default {
             /**
              * [changePage 群组列表的分页切换]
              */
-            changePage() {
-                // // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-                // let mockTableData = [];
-                // for (let i = 0; i < 10; i++) {
-                //     mockTableData.push({
-                //         groupName: '群组',
-                //         groupDesc: '描述',
-                //         groupEnable: '1',
-                //         note: '备注',
-                //         creator: '创建者',
-                //         createTime: 1
-                //     })
-                // }
-
-                // this.groupsTableOptions.groupsTableData = mockTableData;
+            changePage(num) {
+                console.log(num);
+                //更改页数触发事件
+                this.$http.get(ajaxServer + '/groups?groupType=0&page=' + num + '&pageSize=' + this.page.pagesize + '&sortby=create_time').then((res) => {
+                    if (res.status === 200) {
+                        // console.log(res.data.data.list)
+                        this.groupsTableOptions.groupsTableData = res.data.data.list;
+                        console.log(res.data.data.list);
+                    } else {
+                        console.log('请求资源错误');
+                    }
+                })
+            },
+            pageSizeChange(num) {
+                console.log(num);
+                //更改每页显示条数触发事件
+                this.$http.get(ajaxServer + '/groups?groupType=0&page=1&pageSize=' + num + '&sortby=create_time').then((res) => {
+                    if (res.status === 200) {
+                        //重置更改后的pa ge size
+                        console.log(res.data.data);
+                        this.page.pagesize = num;
+                        this.groupsTableOptions.groupsTableData = res.data.data.list;
+                    } else {
+                        console.log('请求资源错误');
+                    }
+                })
             },
             /**
              * [jumpTo 控制页面切换]
@@ -355,9 +372,11 @@ export default {
             getGroupsLists() {
                 //发送get请求， 获取去组列表数据
                 // method: GET
-                this.$http.get(ajaxServer + '/groups?groupType=0').then((res) => {
+                this.$http.get(ajaxServer + '/groups?groupType=0&pageSize=' + this.page.pagesize).then((res) => {
                     if (res.status === 200) {
                         // console.log(res.data.data.list)
+                        //获取总共的设备数值
+                        this.page.count = res.data.data.count;
                         this.groupsTableOptions.groupsTableData = res.data.data.list;
                         console.log(res.data.data.list);
                     } else {
