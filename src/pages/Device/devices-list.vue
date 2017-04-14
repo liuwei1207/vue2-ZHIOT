@@ -12,7 +12,7 @@
             <Table :context="self" :data="groupsTableOptions.groupsTableData" :columns="groupsTableOptions.groupsTableColumns" stripe></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
-                    <Page ref="pa" :total="100" @on-change="changePage" :page-size="1" ></Page>
+                    <Page ref="pa" :total="page.count" :current="page.pageX" :page-size="page.pagesize" @on-change="changePage" @on-page-size-change="pageSizeChange" size="small"  :page-size-opts="[1,2,3,4]" show-total show-elevator show-sizer></Page>
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
                     <Row v-if="createGroupsModalOptions.policyAdding && (createGroupsModalOptions.currentStepIndex == 0)">
                         <Col span="15">
                         <Form :label-width="100">
-                            <Form-item label="策略" prop="groupName">
+                            <Form-item label="策略">
                                 <Select placeholder="请选择" @on-change="">
                                     <Option value="beijing">策略1</Option>
                                     <Option value="shanghai">策略2</Option>
@@ -94,7 +94,7 @@
                         <Col span="15">
                         <Form :label-width="100">
                             <Form-item label="群组">
-                                <p>{{createGroupsModalOptions.formData.group.groupName}}</p>
+                                <p>{{createGroupsModalOptions.formData.policy.policyName}}</p>
                             </Form-item>
                             <Form-item label="策略">
                                 <p>{{createGroupsModalOptions.formData.policy.policyName}}</p>
@@ -114,11 +114,6 @@
                     <Row>
                         <Col span="24">
                         <Form :label-width="100">
-                            <Form-item label="群组" class="ivu-form-item--title">
-                            </Form-item>
-                            <Form-item label="名称">
-                                <p>{{createGroupsModalOptions.formData.group.groupName}}</p>
-                            </Form-item>
                             <Form-item label="策略" class="ivu-form-item--title">
                             </Form-item>
                             <Form-item label="名称">
@@ -150,8 +145,8 @@
                 <i-button type="ghost" @click="cancel">取消</i-button>
             </div>
             <div slot="footer" v-else>
-                <i-button type="primary" @click="next" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button>
-                <i-button type="primary" @click="submit" v-if="createGroupsModalOptions.currentStepIndex == 2">确定</i-button>
+                <!-- <i-button type="primary" @click="next" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button> -->
+                <i-button type="primary" @click="submit" v-if="createGroupsModalOptions.currentStepIndex == 2">提交</i-button>
                 <i-button type="ghost" @click="cancel" v-if="createGroupsModalOptions.currentStepIndex !== 3">取消</i-button>
             </div>
         </Modal>
@@ -161,16 +156,31 @@
 <script>
 import config from '../../../config/index.js';
 let ajaxServer = 'http://' + config.ajax.host + ':' + config.ajax.port + '/cms_manage/api';
-
+//获取地址栏参数函数
+function getArgs(name) {
+    var URL = location.toString();
+    if (URL.indexOf(name) == -1) {
+        alert("没有这个参数");
+        return false
+    } else {
+        var args = URL.split(name + "=");
+        return args[1];
+    }
+}
 export default {
     // ---------------------
     // data 管理本页数据和状态
     // ---------------------
     data() {
             return {
+                //分页器
                 page: {
-                    pageX: 1
+                    pageX: 1,
+                    count: 1,
+                    pagesize: 2
                 },
+
+
                 /**
                  * [createGroupsModalOptions 创建群组对话框设置选项]
                  * @type {Object}
@@ -195,14 +205,6 @@ export default {
                      * @type {Object}
                      */
                     formData: {
-                        group: {
-                            groupName: '',
-                            groupDesc: '',
-                            groupEnable: '',
-                            note: '',
-                            creatorUser: '',
-                            createTime: ''
-                        },
                         policy: {
                             policyName: '',
                             policyTopics: [{
@@ -236,28 +238,25 @@ export default {
                      */
                     groupsTableColumns: [{
                         title: '名称',
-                        key: 'groupName',
+                        key: 'deviceName',
                         render(row) {
-                            return `<i-button type="text" size="small" @click="jumpTo('${row.groupName}')">${row.groupName}</i-button>`;
+                            return `<i-button type="text" size="small" @click="jumpTo('${row.deviceName}')">${row.deviceName}</i-button>`;
                         }
 
                     }, {
-                        title: '描述',
-                        key: 'groupDesc'
-                    }, {
                         title: '是否启用',
-                        key: 'groupgroupEnable',
+                        key: 'deviceEnable',
                         render(row) {
-                            const color = row.groupgroupEnable == 1 ? 'green' : 'red';
-                            const text = row.groupgroupEnable == 1 ? '启用' : '未启用';
+                            const color = row.deviceEnable == 1 ? 'green' : 'red';
+                            const text = row.deviceEnable == 1 ? '启用' : '未启用';
                             return `<tag type="dot" color="${color}">${text}</tag>`;
                         }
                     }, {
                         title: '备注',
                         key: 'note'
                     }, {
-                        title: '创建者',
-                        key: 'creator'
+                        title: 'Tag',
+                        key: 'deviceTag'
                     }, {
                         title: '创建时间',
                         key: 'createTime'
@@ -273,6 +272,11 @@ export default {
                 }
             }
         },
+        computed: {
+            pageNum: function() {
+                return this.count
+            }
+        },
         // ---------------------
         // methods 管理交互操作
         // ---------------------
@@ -282,11 +286,26 @@ export default {
              */
             changePage(num) {
                 console.log(num);
-                //发送get请求， 获取去组列表数据
-                // method: GET
-                this.$http.get(ajaxServer + '/devices?page='+num+'&groupId=83&sortby=create_time').then((res) => {
+                let groupId = getArgs("groupId");
+                //更改页数触发事件
+                this.$http.get(ajaxServer + '/devices?page=' + num + '&pageSize=' + this.page.pagesize + '&groupId=' + groupId + '&sortby=create_time').then((res) => {
                     if (res.status === 200) {
                         // console.log(res.data.data.list)
+                        this.groupsTableOptions.groupsTableData = res.data.data.list;
+                        console.log(res.data.data.list);
+                    } else {
+                        console.log('请求资源错误');
+                    }
+                })
+            },
+            pageSizeChange(num) {
+                console.log(num);
+                let groupId = getArgs("groupId");
+                //更改每页显示条数触发事件
+                this.$http.get(ajaxServer + '/devices?page=1&pageSize=' + num + '&groupId=' + groupId + '&sortby=create_time').then((res) => {
+                    if (res.status === 200) {
+                        //重置更改后的pa ge size
+                        this.page.pagesize = num;
                         this.groupsTableOptions.groupsTableData = res.data.data.list;
                     } else {
                         console.log('请求资源错误');
@@ -390,16 +409,22 @@ export default {
             },
 
             /**
-             * [getGroupsList 获取设备列表]
+             * [getDevicesList 获取设备列表]
              * @return {[type]} [description]
              */
-            getGroupsList() {
+            getDevicesList() {
+                //从路径中获取groupId的值
+                let groupId = getArgs("groupId");
+                console.log(groupId);
                 //发送get请求， 获取去组列表数据
                 // method: GET
-                this.$http.get(ajaxServer + '/devices?page=1&groupId=83&sortby=create_time').then((res) => {
+                this.$http.get(ajaxServer + '/devices?groupId=' + groupId + '&pageSize=' + this.page.pagesize + '&sortby=create_time').then((res) => {
                     if (res.status === 200) {
                         // console.log(res.data.data.list)
                         this.groupsTableOptions.groupsTableData = res.data.data.list;
+                        //获取总共的设备数值
+                        this.page.count = res.data.data.count;
+                        console.log(this.page.pagesize);
                     } else {
                         console.log('请求资源错误');
                     }
@@ -410,7 +435,7 @@ export default {
         // created 页面生命周期
         // ---------------------
         created() {
-            this.getGroupsList();
+            this.getDevicesList();
         }
 }
 </script>
