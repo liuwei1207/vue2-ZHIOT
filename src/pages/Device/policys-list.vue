@@ -124,6 +124,10 @@
     </div>
 </template>
 <script>
+// 根据 process.env.NODE_ENV 来区分开发环境和生产环境
+import Config from '../../../config';
+let isProduction = process.env.NODE_ENV === 'production'
+let config = isProduction ? Config.build : Config.dev;
 export default {
     // ---------------------
     // data 管理本页数据和状态

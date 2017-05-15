@@ -19,7 +19,12 @@ module.exports = {
         // View the bundle analyzer report after build finishes:
         // `npm run build --report`
         // Set to `true` or `false` to always turn it on or off
-        bundleAnalyzerReport: process.env.npm_config_report
+        bundleAnalyzerReport: process.env.npm_config_report,
+        ajax: {
+            // Ajax server
+            host: '192.168.1.168',
+            port: '8080'
+        }
     },
     dev: {
         env: require('./dev.env'),
@@ -34,10 +39,11 @@ module.exports = {
         // In our experience, they generally work as expected,
         // just be aware of this issue when enabling this option.
         cssSourceMap: false,
-    },
-    ajax: {
-        // Ajax server
-        host: '192.168.1.168',
-        port: '8080'
+        ajax: {
+            // Ajax server
+            host: '120.76.85.23',
+            port: '8080'
+        }
+
     }
 }

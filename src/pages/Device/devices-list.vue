@@ -12,7 +12,7 @@
             <Table :context="self" :data="groupsTableOptions.groupsTableData" :columns="groupsTableOptions.groupsTableColumns" stripe></Table>
             <div style="margin: 10px;overflow: hidden">
                 <div style="float: right;">
-                    <Page ref="pa" :total="page.count" :current="page.pageX" :page-size="page.pagesize" @on-change="changePage" @on-page-size-change="pageSizeChange" size="small"  :page-size-opts="[1,2,3,4]" show-total show-elevator show-sizer></Page>
+                    <Page ref="pa" :total="page.count" :current="page.pageX" :page-size="page.pagesize" @on-change="changePage" @on-page-size-change="pageSizeChange" size="small"  :page-size-opts="[10,20,30,40]" show-total show-elevator show-sizer></Page>
                 </div>
             </div>
         </div>
@@ -154,7 +154,12 @@
     </div>
 </template>
 <script>
-import config from '../../../config/index.js';
+
+// 根据 process.env.NODE_ENV 来区分开发环境和生产环境
+import Config from '../../../config';
+let isProduction = process.env.NODE_ENV === 'production'
+let config = isProduction?Config.build:Config.dev;
+
 let ajaxServer = 'http://' + config.ajax.host + ':' + config.ajax.port + '/cms_manage/api';
 //获取地址栏参数函数
 function getArgs(name) {
@@ -177,7 +182,7 @@ export default {
                 page: {
                     pageX: 1,
                     count: 1,
-                    pagesize: 2
+                    pagesize: 10
                 },
 
 

@@ -29,32 +29,49 @@
 </template>
 <script>
 export default {
+    // 不要忘记了 name 属性
+    name: 'LayoutContent',
+    // 组合其它组件
+    extends: {},
+    // 组件属性
+    props: {
+
+    },
+    // 变量
     data() {
-            return {
-                show: true
-            }
+        return {
+            show: true
+        }
+    },
+    // 计算属性
+    computed: {
+        // 返回左侧导航区宽度
+        spanLeft() {
+            return this.$store.state.pageOptions.spanLeft;
         },
-        computed: {
-            // 返回左侧导航区宽度
-            spanLeft() {
-                return this.$store.state.pageOptions.spanLeft;
-            },
-            // 返回右侧内容区宽度
-            spanRight() {
-                return this.$store.state.pageOptions.spanRight;
-            }
-        },
-        methods: {
-            toggleClick() {
-                if (this.spanLeft === 4) {
-                    this.$store.state.pageOptions.spanLeft = 2;
-                    this.$store.state.pageOptions.spanRight = 22;
-                } else {
-                    this.$store.state.pageOptions.spanLeft = 4;
-                    this.$store.state.pageOptions.spanRight = 20;
-                }
+        // 返回右侧内容区宽度
+        spanRight() {
+            return this.$store.state.pageOptions.spanRight;
+        }
+    },
+    // 使用其它组件
+    components: {},
+    // 方法
+    watch: {},
+    methods: {
+        toggleClick() {
+            if (this.spanLeft === 4) {
+                this.$store.state.pageOptions.spanLeft = 2;
+                this.$store.state.pageOptions.spanRight = 22;
+            } else {
+                this.$store.state.pageOptions.spanLeft = 4;
+                this.$store.state.pageOptions.spanRight = 20;
             }
         }
+    },
+    // 生命周期函数
+    beforeCreate() {},
+    mounted() {}
 }
 </script>
 <style>
@@ -105,9 +122,13 @@ export default {
 .layout-logo-left {
     width: 90%;
     height: 30px;
+    text-align: center;
+    line-height: 30px;
     background: #5b6270;
+    color: #fff;
     border-radius: 3px;
     margin: 15px auto;
+    font-size: 16px;
 }
 
 .layout-ceiling-main a {

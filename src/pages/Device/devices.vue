@@ -2,7 +2,7 @@
     <MainContent>
         <!-- slot-Menu -->
         <Menu slot="Menu" active-name="devices/groups-list" theme="dark" width="auto" @on-select="handleRouterSwitch">
-            <div class="layout-logo-left"></div>
+            <div class="layout-logo-left">{{clock}}</div>
             <Menu-group title="设备管理" v-if="currentRouterPath == '/devices/groups-list'">
                 <!-- 判断当前路由是群组列表，则显示对应的左侧导航栏内容 -->
                 <Menu-item name="devices/groups-list">
@@ -28,7 +28,8 @@
             <Breadcrumb-item>
                 <router-link :to="'/'">ZHIOT</router-link>
             </Breadcrumb-item>
-            <Breadcrumb-item v-if="currentRouterPath !== '/devices/groups-list'"><!-- 判断当前路由是群组列表，则不显示对应的面包屑导航 -->
+            <Breadcrumb-item v-if="currentRouterPath !== '/devices/groups-list'">
+                <!-- 判断当前路由是群组列表，则不显示对应的面包屑导航 -->
                 <router-link :to="'groups-list'">群组列表</router-link>
             </Breadcrumb-item>
             <Breadcrumb-item>{{currentRouterName}}</Breadcrumb-item>
@@ -38,11 +39,12 @@
 </template>
 <script>
 import MainContent from '../../components/layout-content.vue';
+import moment from 'moment';
 
 export default {
     data() {
             return {
-
+                clock: '正在加载中..请稍后'
             }
         },
         computed: {
@@ -65,10 +67,16 @@ export default {
                     //     plan: 'private'
                     // }
                 });
+            },
+            getClock() {
+                this.clock = moment().format('YYYY-MM-DD HH:mm:ss');
             }
         },
         components: {
             MainContent
+        },
+        mounted() {
+            setInterval(this.getClock, 1000);
         }
 }
 </script>
